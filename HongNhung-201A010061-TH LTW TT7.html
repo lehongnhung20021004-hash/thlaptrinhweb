@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồng Nhung 201A010061</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #bbf7ff;
+            background-image: radial-gradient(circle, #cbd3ff 0%, #d8fff5 100%);
+            font-family: 'Arial', sans-serif;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .instruction {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 40px;
+            font-style: italic;
+            z-index: 10;
+        }
+
+        .scene {
+            width: 210px;
+            height: 300px;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+        }
+
+        .carousel__cell {
+            position: absolute;
+            width: 190px;
+            height: 280px;
+            left: 10px;
+            top: 10px;
+            border: 5px solid #b1d0ff;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(73, 100, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1s, opacity 0.3s, border-color 0.3s;
+            cursor: zoom-in; 
+            overflow: hidden;
+        }
+
+        .carousel__cell:hover {
+            border-color: #ff4500;
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.8);
+        }
+
+        .carousel__cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cell-label {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 8px 0;
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .lantern-top, .lantern-bottom {
+            width: 260px;
+            height: 40px;
+            background: #800000;
+            border: 2px solid #ffd700;
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+            box-shadow: 0 0 30px #ff4500;
+        }
+
+        .lantern-top { top: -30px; transform: rotateX(70deg); }
+        .lantern-bottom { bottom: -30px; transform: rotateX(70deg); }
+
+
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9); 
+            z-index: 2000; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px); 
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 80vh;
+            border: 5px solid #fff;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .lightbox.active .lightbox-content {
+            transform: scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover { color: #ff4d4d; }
+        
+        .lightbox-caption {
+            position: absolute;
+            bottom: 5%;
+            color: white;
+            font-size: 1.5rem;
+            text-shadow: 0 2px 4px black;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Đèn Kéo Quân</h1>
+    <p class="instruction"></p>
+
+    <div class="scene">
+        <div class="lantern-top"></div>
+        
+        <div class="carousel" id="lampCarousel">
+            <!-- MẶT 1: Ảnh của bạn -->
+            <div class="carousel__cell" data-caption="Chân Dung ">
+                <img src="https://i.pinimg.com/736x/54/57/f1/5457f1b65ffcbf5e99217ab03b88ff6f.jpg" alt="Ảnh Chân Dung">
+            </div>
+
+            <!-- MẶT 2 -->
+            <div class="carousel__cell" data-caption="Biển xanh">
+                <img src="https://i.pinimg.com/736x/3b/3c/96/3b3c96b301e354406f667472fbc70bb9.jpg" alt="Phong Cảnh 1">
+            </div>
+
+            <!-- MẶT 3 -->
+            <div class="carousel__cell" data-caption="Mèo và biển">
+                <img src="https://i.pinimg.com/1200x/b6/2a/43/b62a4317b2cbe45cad2d5441f9d04638.jpg" alt="Phong Cảnh 2">
+            </div>
+
+            <!-- MẶT 4 -->
+            <div class="carousel__cell" data-caption="Biển Xanh Mênh Mông">
+                <img src="https://i.pinimg.com/736x/7c/16/52/7c1652024e793abc79604e099a79dd0c.jpg" alt="Phong Cảnh 3">
+            </div>
+
+            <!-- MẶT 5 -->
+            <div class="carousel__cell" data-caption="One day">
+                <img src="https://i.pinimg.com/736x/8a/67/b3/8a67b3e7d0fd5eccd791c92bc9ea133d.jpg" alt="Phong Cảnh 4">
+            </div>
+
+            <!-- MẶT 6 -->
+            <div class="carousel__cell" data-caption="Mây xanh">
+                <img src="https://i.pinimg.com/736x/38/46/cd/3846cd1deb35b7d0528b378e2f991b4f.jpg" alt="Phong Cảnh 5">
+            </div>
+        </div>
+
+        <div class="lantern-bottom"></div>
+    </div>
+
+    <div id="lightbox" class="lightbox">
+        <span class="close-btn" id="closeBtn">&times;</span>
+        <img class="lightbox-content" id="lightboxImg" src="" alt="Phóng to">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <script>
+        const carousel = document.getElementById('lampCarousel');
+        const cells = document.querySelectorAll('.carousel__cell');
+        
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const closeBtn = document.getElementById('closeBtn');
+
+        const cellCount = 6;
+        let currentAngle = 0;
+        let isPaused = false;    
+        let isModalOpen = false; 
+        let rotationSpeed = 0.5;
+
+        function initCarousel() {
+            const theta = 360 / cellCount;
+            const radius = Math.round((190 / 2) / Math.tan(Math.PI / cellCount));
+            
+            cells.forEach((cell, i) => {
+                const cellAngle = theta * i;
+                cell.style.transform = `rotateY(${cellAngle}deg) translateZ(${radius + 20}px)`;
+            });
+        }
+
+        function animate() {
+            if (!isPaused && !isModalOpen) {
+                currentAngle -= rotationSpeed;
+                carousel.style.transform = `rotateY(${currentAngle}deg)`;
+            }
+            requestAnimationFrame(animate);
+        }
+
+        cells.forEach(cell => {
+            const img = cell.querySelector('img');
+            const caption = cell.getAttribute('data-caption'); 
+
+            cell.addEventListener('mouseenter', () => {
+                isPaused = true;
+            });
+
+            cell.addEventListener('mouseleave', () => {
+                isPaused = false;
+            });
+
+            cell.addEventListener('click', () => {
+                lightboxImg.src = img.src; 
+                lightboxCaption.innerText = caption;
+                lightbox.classList.add('active');
+                isModalOpen = true; 
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            
+          
+            setTimeout(() => {
+                isModalOpen = false;
+            }, 300);
+        }
+
+        closeBtn.addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        initCarousel();
+        animate();
+    </script>
+</body>
+</html>
